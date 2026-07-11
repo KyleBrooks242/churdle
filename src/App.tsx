@@ -78,6 +78,7 @@ const App = () => {
         const { startTime, endTime } = getTimeStampRange();
         const isActiveChurdleWord = (churdleCookie?.lastPlayedTimestamp > startTime && churdleCookie?.lastPlayedTimestamp < endTime)
         //Cookie found and not expired
+
         if (churdleCookie && isActiveChurdleWord) {
             churdleCookie.gameState.keyboard = mapFromData(churdleCookie.gameState.keyboard)
             setState({...state, ...churdleCookie.gameState});

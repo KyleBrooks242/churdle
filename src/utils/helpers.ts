@@ -1,6 +1,6 @@
 import {IChurdleLetter} from '../interfaces/IChurdleLetter';
 import {IAppState} from '../interfaces/IAppState';
-import {DAY_SECTIONS, GuessScore, SECONDS_IN_A_DAY, SECONDS_PER_GAME, SQUARE_MAP} from './constants';
+import {DAY_SECTIONS, GuessScore, SECONDS_IN_A_DAY, SECONDS_PER_GAME} from './constants';
 import {ValidWords} from '../word-lists/ValidWords';
 import {ChurdleWords} from '../word-lists/ChurdleWords';
 import {WinningPhrases} from '../word-lists/WinningPhrases';
@@ -8,7 +8,6 @@ import {LosingPhrases} from '../word-lists/LosingPhrases';
 import {SubheaderPhrases} from '../word-lists/SubheaderPhrases';
 import {GAME_STATUS, ICookieState} from '../interfaces/ICookieState';
 import {IGameStats} from '../interfaces/IGameStats';
-import clipboard from "clipboardy";
 
 const LocalStorage = require('localStorage');
 const dayjs = require('dayjs');
@@ -113,7 +112,7 @@ export const getWordToGuess = ():string => {
     const index = Math.floor((dayjs().subtract(initialDate, 's').unix()) / SECONDS_IN_A_DAY);
     const offset = _calculateOffset();
 
-    return ChurdleWords[index + offset];
+    return ChurdleWords[(index + offset) % ChurdleWords.length];
 }
 
 export const getWordToGuessIndex = () => {
@@ -250,8 +249,12 @@ export const JSONFromMap = (map: Map<any, number>) => {
     return Array.from(map);
 }
 
-export const mapFromData = (JsonData: any) => {
-    return new Map(JsonData);
+export const mapFromData = (jsonData: any) => {
+    
+    if (Object.keys(jsonData).length === 0) {
+        return new Map();
+    }
+    return new Map(jsonData);
 }
 
 //Quick helper function to return the greater of the two values provided... used as a setter for longestStreak
